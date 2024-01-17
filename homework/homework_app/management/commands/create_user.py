@@ -8,4 +8,4 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         user = User(name='Yarik', email='yarik@gmail.com', phone='123', address='QRoo', reg_date='2024-01-17')
         user.save()
-        self.stdout.write(f'{user}')
+        self.stdout.write(f'User {user} is created')

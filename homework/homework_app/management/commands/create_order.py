@@ -13,4 +13,4 @@ class Command(BaseCommand):
         item = Item.objects.get(pk=item_id)
         order.item.add(item)
         order.save()
-        self.stdout.write(f'{order}')
+        self.stdout.write(f'{order} is created')

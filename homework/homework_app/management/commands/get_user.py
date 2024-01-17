@@ -3,14 +3,12 @@ from homework_app.models import User
 
 
 class Command(BaseCommand):
-    help = 'delete user by ID'
+    help = 'Get user be ID'
 
     def add_arguments(self, parser):
-        parser.add_argument('pk', type=int, help='UserID')
+        parser.add_argument('pk', type=int, help='User ID')
 
     def handle(self, *args, **kwargs):
-        pk = kwargs.get('pk')
+        pk = kwargs['pk']
         user = User.objects.filter(pk=pk).first()
-        if user is not None:
-            user.delete()
-        self.stdout.write(f'{user} is deleted')
+        self.stdout.write(f'{user}')
