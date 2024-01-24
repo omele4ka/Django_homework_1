@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order List</title>
+</head>
+<body>
+    <h1>{{ user.name }}'s Orders</h1>
+
+    <h2>Last 7 Days</h2>
+    <ul>
+        {% for order in orders_last_7_days %}
+            <li>{{ order.total_price }} - {{ order.order_date }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Last 30 Days</h2>
+    <ul>
+        {% for order in orders_last_30_days %}
+            <li>{{ order.total_price }} - {{ order.order_date }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Last 365 Days</h2>
+    <ul>
+        {% for order in orders_last_365_days %}
+            <li>{{ order.total_price }} - {{ order.order_date }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

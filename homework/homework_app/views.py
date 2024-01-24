@@ -2,6 +2,7 @@
 # — главная
 # — о себе.
 
+
 # Внутри каждого представления должна быть переменная html —
 # многострочный текст с HTML-вёрсткой и данными
 # о вашем первом Django-сайте и о вас.
@@ -9,7 +10,11 @@
 
 from django.http import HttpResponse
 import logging
+from datetime import timezone, datetime
 
+from django.shortcuts import render
+
+from .models import User, Order
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +34,7 @@ def index(request):
     """
     return HttpResponse(html)
 
+
 def about(request):
     logger.info('about us was requested')
     html = """
@@ -44,4 +50,27 @@ def about(request):
         </html>
     """
     return HttpResponse(html)
+
+
+def order_list(request, user_id):
+    user = User.objects.get(id=user_id)
+    orders = Order.objects.filter(user=user).order_by('-order_date')
+
+    def filter_orders_last_n_days(n):
+        end_date = timezone.now()
+        start_date = end_date - datetime.timedelta(days=n)
+        return orders.filter(order_date__range=[start_date, end_date])
+
+    orders_last_7_days = filter_orders_last_n_days(7)
+    orders_last_30_days = filter_orders_last_n_days(30)
+    orders_last_365_days = filter_orders_last_n_days(365)
+
+    context = {
+        'user': user,
+        'orders_last_7_days': orders_last_7_days,
+        'orders_last_30_days': orders_last_30_days,
+        'orders_last_365_days': orders_last_365_days,
+    }
+
+    return render(request, 'order_list.html', context)
 
