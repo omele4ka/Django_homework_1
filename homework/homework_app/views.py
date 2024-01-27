@@ -11,10 +11,9 @@
 from django.http import HttpResponse
 import logging
 from datetime import timezone, datetime
-
 from django.shortcuts import render
-
 from .models import User, Order
+from .forms import ItemPictureForm
 
 logger = logging.getLogger(__name__)
 
@@ -74,3 +73,18 @@ def order_list(request, user_id):
 
     return render(request, 'order_list.html', context)
 
+
+def item_picture_form(request):
+    if request.method == 'POST':
+        form = ItemPictureForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            description = form.cleaned_data['description']
+            price = form.cleaned_data['price']
+            quantity = form.cleaned_data['quantity']
+            picture = form.cleaned_data['picture']
+            logger.info(f'Добавлен товар {title}, цена: {price}')
+    else:
+        form = ItemPictureForm()
+
+    return render(request, 'homework_app/item_picture_form.html', {'form': form})
