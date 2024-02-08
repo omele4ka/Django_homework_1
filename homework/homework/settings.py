@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,14 +24,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-g+4ar+%3elm*d3ak&e-+wp!t)4&q8%*kcywbtzxc3bn_xm5b50'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'omele4ka.pythinanywhere.com',
+]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'debug_toolbar',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,6 +46,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -51,6 +57,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'homework.urls'
+
+INTERNAL_IPS = ['127.0.0.1']
 
 TEMPLATES = [
     {
@@ -78,8 +86,16 @@ WSGI_APPLICATION = 'homework.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / "db.sqlite3",
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'omele4ka$default',
+        'USER': 'omele4ka',
+        'PASSWORD': os.getenv('MYSQL_PASSWORD'),
+        'HOSTS': 'omele4ka.mysql.pythonanywhere-services.com',
+        'OPTIONS': {
+            'init_command': 'SET NAMES "utf8mb64";'
+                            'SET sql_mode = "STRICT_TRANS_TABLES"',
+            'charset': 'utf8mb64',
+        }
     }
 }
 
@@ -159,3 +175,6 @@ LOGGING = {
         },
     },
 }
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
